@@ -95,6 +95,16 @@ const CONDITIONS = [
   { key: "green", name: "Green (fresh sawn)", note: "Still saturated; ~65% MC", fixed: 65 },
 ];
 
+// Recommended tools. Replace `url` with your real affiliate links once approved
+// (Amazon Associates, Home Depot via Impact, etc.). Keep the list short and
+// genuinely useful — items that pair with measuring and pricing lumber.
+const TOOLS = [
+  { name: "25' Tape Measure", blurb: "Wide standout blade for reaching across boards solo.", url: "" },
+  { name: "Pinless Moisture Meter", blurb: "Check moisture content before you buy — pairs with the weight estimate here.", url: "" },
+  { name: "Speed / Rafter Square", blurb: "Fast square cuts and angle marking on framing lumber.", url: "" },
+  { name: "Safety Glasses", blurb: "Basic eye protection for cutting and handling.", url: "" },
+];
+
 // ---------------------------------------------------------------------------
 // HELPERS
 // ---------------------------------------------------------------------------
@@ -568,6 +578,34 @@ export default function LumberCalculator() {
         </section>
       </div>
 
+      <section className="lc-tools">
+        <div className="lc-tools-head">
+          <h2 className="lc-tools-title">Recommended tools</h2>
+          <span className="lc-tools-disc">
+            As an Amazon Associate this site may earn from qualifying purchases.
+          </span>
+        </div>
+        <div className="lc-tools-grid">
+          {TOOLS.map((t) => {
+            const live = t.url && t.url.length > 0;
+            return (
+              <a
+                key={t.name}
+                className={`lc-tool ${live ? "" : "lc-tool-soon"}`}
+                href={live ? t.url : undefined}
+                target={live ? "_blank" : undefined}
+                rel={live ? "sponsored noopener noreferrer" : undefined}
+                onClick={live ? undefined : (e) => e.preventDefault()}
+              >
+                <div className="lc-tool-name">{t.name}</div>
+                <div className="lc-tool-blurb">{t.blurb}</div>
+                <div className="lc-tool-cta">{live ? "View on Amazon \u2192" : "Link coming soon"}</div>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+
       <footer className="lc-foot">
         EMC values: USDA Forest Products Laboratory Research Note FPL-RN-0268
         (Simpson 1998), updated by P. Mitchell / NC State from 1981&#8211;2010 NOAA
@@ -681,6 +719,22 @@ const css = `
   font-variant-numeric:tabular-nums; font-weight:600; color:var(--ink);}
 .lc-swing{margin-top:12px; font-size:12.5px; line-height:1.5; color:#5c4e3c;
   background:#f3ecdd; border-left:3px solid var(--wet); padding:9px 11px; border-radius:0 3px 3px 0;}
+
+.lc-tools{max-width:960px; margin:26px auto 0; padding-top:22px; border-top:1px solid var(--line);}
+.lc-tools-head{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between;
+  gap:6px 14px; margin-bottom:14px;}
+.lc-tools-title{font-family:Georgia,serif; font-size:20px; margin:0; color:var(--ink);}
+.lc-tools-disc{font-size:11px; color:#8a7a62; font-style:italic;}
+.lc-tools-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px;}
+.lc-tool{display:flex; flex-direction:column; text-decoration:none; background:var(--card);
+  border:1px solid var(--line); border-radius:4px; padding:14px; transition:.12s; color:var(--ink);}
+.lc-tool:hover{border-color:var(--grain); box-shadow:0 2px 6px rgba(122,92,56,.12);}
+.lc-tool-soon{opacity:.72; cursor:default;}
+.lc-tool-soon:hover{border-color:var(--line); box-shadow:none;}
+.lc-tool-name{font-weight:700; font-size:14px; margin-bottom:5px;}
+.lc-tool-blurb{font-size:12px; color:#5c4e3c; line-height:1.45; flex:1;}
+.lc-tool-cta{margin-top:10px; font-size:12px; font-weight:700; color:var(--sap); letter-spacing:.02em;}
+.lc-tool-soon .lc-tool-cta{color:#a89a80;}
 
 .lc-foot{max-width:960px; margin:22px auto 0; font-size:11px; color:#8a7a62;
   line-height:1.5; border-top:1px solid var(--line); padding-top:14px;}
