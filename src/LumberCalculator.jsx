@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useLayoutEffect } from "react";
 
 // ---------------------------------------------------------------------------
 // DATA
@@ -129,6 +129,49 @@ const fmt = (n, d = 2) =>
 // ---------------------------------------------------------------------------
 // COMPONENT
 // ---------------------------------------------------------------------------
+
+// Scales its text down (never up past maxPx) so the full number always fits
+// its container width — no truncation, no ellipsis, no hover tooltip.
+function AutoFitNumber({ children, maxPx = 38, minPx = 15, className }) {
+  const boxRef = useRef(null);
+  const textRef = useRef(null);
+  const [size, setSize] = useState(maxPx);
+
+  useLayoutEffect(() => {
+    const box = boxRef.current;
+    const text = textRef.current;
+    if (!box || !text) return;
+
+    const fit = () => {
+      let lo = minPx, hi = maxPx, best = minPx;
+      // Binary-search the largest font size that doesn't overflow.
+      for (let i = 0; i < 8; i++) {
+        const mid = (lo + hi) / 2;
+        text.style.fontSize = mid + "px";
+        if (text.scrollWidth <= box.clientWidth) {
+          best = mid; lo = mid;
+        } else {
+          hi = mid;
+        }
+      }
+      text.style.fontSize = "";
+      setSize(best);
+    };
+
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(box);
+    return () => ro.disconnect();
+  }, [children, maxPx, minPx]);
+
+  return (
+    <div ref={boxRef} className={className} style={{ overflow: "hidden" }}>
+      <span ref={textRef} style={{ fontSize: size + "px", whiteSpace: "nowrap", display: "inline-block" }}>
+        {children}
+      </span>
+    </div>
+  );
+}
 
 export default function LumberCalculator() {
   const [sizeLabel, setSizeLabel] = useState("2x4");
@@ -478,17 +521,17 @@ export default function LumberCalculator() {
         <section className="lc-panel lc-results">
           <div className="lc-headline">
             <div className="lc-hl-block">
-              <div className="lc-hl-num">{fmt(results.bfTotal)}</div>
+              <AutoFitNumber className="lc-hl-num">{fmt(results.bfTotal)}</AutoFitNumber>
               <div className="lc-hl-lab">board feet</div>
             </div>
             <div className="lc-hl-div" />
             <div className="lc-hl-block">
-              <div className="lc-hl-num">{fmt(results.wtTotal, 1)}</div>
+              <AutoFitNumber className="lc-hl-num">{fmt(results.wtTotal, 1)}</AutoFitNumber>
               <div className="lc-hl-lab">lbs &#183; {MONTHS[monthIdx].slice(0,3)}</div>
             </div>
             <div className="lc-hl-div" />
             <div className="lc-hl-block">
-              <div className="lc-hl-num">{orderTotal != null ? usd(orderTotal) : "\u2014"}</div>
+              <AutoFitNumber className="lc-hl-num">{orderTotal != null ? usd(orderTotal) : "\u2014"}</AutoFitNumber>
               <div className="lc-hl-lab">order total</div>
             </div>
           </div>
@@ -614,9 +657,7 @@ const css = `
 .lc-headline{display:flex; flex-wrap:wrap; align-items:flex-start; gap:14px 18px; padding-bottom:18px;
   border-bottom:1px solid var(--line); margin-bottom:16px;}
 .lc-hl-block{flex:1 1 90px; min-width:0;}
-.lc-hl-num{font-family:Georgia,serif; font-size:clamp(22px, 4.6vw, 38px); line-height:1.05;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  font-variant-numeric:tabular-nums;}
+.lc-hl-num{font-family:Georgia,serif; line-height:1.05; font-variant-numeric:tabular-nums;}
 .lc-hl-lab{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--grain); margin-top:6px; font-weight:700;}
 .lc-hl-div{width:1px; align-self:stretch; background:var(--line);}
