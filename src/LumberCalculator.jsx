@@ -99,10 +99,10 @@ const CONDITIONS = [
 // (Amazon Associates, Home Depot via Impact, etc.). Keep the list short and
 // genuinely useful — items that pair with measuring and pricing lumber.
 const TOOLS = [
-  { name: "25' Tape Measure", blurb: "Wide standout blade for reaching across boards solo.", url: "https://amzn.to/4fndUbj" },
-  { name: "Pinless Moisture Meter", blurb: "Check moisture content before you buy — pairs with the weight estimate here.", url: "https://amzn.to/4weXfhp" },
-  { name: "Speed / Rafter Square", blurb: "Fast square cuts and angle marking on framing lumber.", url: "https://amzn.to/44EnZeU" },
-  { name: "Safety Glasses", blurb: "Basic eye protection for cutting and handling.", url: "https://amzn.to/4yutOsV" },
+  { name: "25' Tape Measure", blurb: "Wide standout blade for reaching across boards solo.", url: "" },
+  { name: "Pinless Moisture Meter", blurb: "Check moisture content before you buy — pairs with the weight estimate here.", url: "" },
+  { name: "Speed / Rafter Square", blurb: "Fast square cuts and angle marking on framing lumber.", url: "" },
+  { name: "Safety Glasses", blurb: "Basic eye protection for cutting and handling.", url: "" },
 ];
 
 // ---------------------------------------------------------------------------
