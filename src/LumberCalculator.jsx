@@ -222,9 +222,11 @@ export default function LumberCalculator() {
       </header>
 
       <div className="lc-tabs">
-        <button className={`lc-tab ${tab === "lumber" ? "is-on" : ""}`} onClick={() => setTab("lumber")}>Lumber</button>
-        <button className={`lc-tab ${tab === "plywood" ? "is-on" : ""}`} onClick={() => setTab("plywood")}>Plywood</button>
-        <button className={`lc-tab ${tab === "calc" ? "is-on" : ""}`} onClick={() => setTab("calc")}>Calculator</button>
+        <div className="lc-tabs-inner">
+          <button className={`lc-tab ${tab === "lumber" ? "is-on" : ""}`} onClick={() => setTab("lumber")}>Lumber</button>
+          <button className={`lc-tab ${tab === "plywood" ? "is-on" : ""}`} onClick={() => setTab("plywood")}>Plywood</button>
+          <button className={`lc-tab ${tab === "calc" ? "is-on" : ""}`} onClick={() => setTab("calc")}>Calculator</button>
+        </div>
       </div>
 
       {tab === "lumber" && (
@@ -477,9 +479,8 @@ const css = `
 .lc-sub{margin:0; max-width:600px; color:var(--sub); font-size:17px; line-height:1.5;
   font-weight:400;}
 
-.lc-tabs{max-width:960px; margin:0 auto 20px; display:inline-flex; gap:2px;
-  background:var(--chip); padding:3px; border-radius:980px;}
-.lc-tabs-wrap{max-width:960px; margin:0 auto 20px;}
+.lc-tabs{max-width:960px; margin:0 auto 20px; display:flex; justify-content:flex-start;}
+.lc-tabs-inner{display:inline-flex; gap:2px; background:var(--chip); padding:3px; border-radius:980px;}
 .lc-tab{font:inherit; font-size:14px; font-weight:500; padding:8px 22px; cursor:pointer;
   background:none; border:none; color:var(--sub); border-radius:980px; transition:.15s;}
 .lc-tab:hover{color:var(--ink);}
